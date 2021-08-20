@@ -14,7 +14,7 @@ import components.simplewriter.SimpleWriter1L;
 /**
  * Put a short phrase describing the program here.
  *
- * @author Put your name here
+ * @author Nyja Gowda
  *
  */
 public final class WordCounter {
