@@ -60,7 +60,37 @@ public class Sequence3<T> extends SequenceSecondary<T> {
         assert newLeftLength <= leftStack.length() + rightStack.length() : ""
                 + "Violation of: newLeftLength <= |leftStack| + |rightStack|";
 
-        // TODO - fill in body
+//        if (leftStack.length() > newLeftLength) {
+//            int i = 0;
+//            int len = leftStack.length();
+//            while (i < len - newLeftLength) {
+//                T x = leftStack.pop();
+//                rightStack.push(x);
+//                i++;
+//            }
+//        }
+//        if (leftStack.length() < newLeftLength) {
+//            int i = 0;
+//            int len = leftStack.length();
+//            while (i < newLeftLength - len) {
+//                T x = rightStack.pop();
+//                leftStack.push(x);
+//                i++;
+//            }
+//        }
+        if (newLeftLength < leftStack.length()) {
+            while (newLeftLength < leftStack.length()) {
+                T x = leftStack.pop();
+                rightStack.push(x);
+            }
+        } else {
+            if (newLeftLength > leftStack.length()) {
+                while (newLeftLength > leftStack.length()) {
+                    T x = rightStack.pop();
+                    leftStack.push(x);
+                }
+            }
+        }
 
     }
 
@@ -129,29 +159,26 @@ public class Sequence3<T> extends SequenceSecondary<T> {
         assert x != null : "Violation of: x is not null";
         assert 0 <= pos : "Violation of: 0 <= pos";
         assert pos <= this.length() : "Violation of: pos <= |this|";
-
-        // TODO - fill in body
-
+        //call the lenghtofleftstack method here with the int param as pos
+        setLengthOfLeftStack(this.left, this.right, pos);
+        this.left.push(x);
     }
 
     @Override
     public final T remove(int pos) {
         assert 0 <= pos : "Violation of: 0 <= pos";
         assert pos < this.length() : "Violation of: pos < |this|";
+        setLengthOfLeftStack(this.left, this.right, pos);
+        return this.right.pop();
 
-        // TODO - fill in body
-
-        // This line added just to make the component compilable.
-        return null;
     }
 
     @Override
     public final int length() {
 
-        // TODO - fill in body
+        int x = this.left.length() + this.right.length();
+        return x;
 
-        // This line added just to make the component compilable.
-        return 0;
     }
 
     @Override
@@ -159,5 +186,28 @@ public class Sequence3<T> extends SequenceSecondary<T> {
         setLengthOfLeftStack(this.left, this.right, 0);
         return this.right.iterator();
     }
+    /*
+     * Other methods (overridden for performance reasons) ---------------------
+     */
 
+    @Override
+    public final void flip() {
+        setLengthOfLeftStack(this.left, this.right,
+                this.left.length() + this.right.length());
+        this.right.transferFrom(this.left); //VVIMP
+    }
+    /*
+     * Other methods (overridden for performance reasons) ---------------------
+     */
+
+    @Override
+    public final T entry(int pos) {
+        assert 0 <= pos : "Violation of: 0 <= pos";
+        assert pos < this.length() : "Violation of: pos < |this|";
+
+        setLengthOfLeftStack(this.left, this.right, pos);
+        T x = this.right.pop();
+        this.right.push(x);
+        return x;
+    }
 }
